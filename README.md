@@ -2,6 +2,8 @@
 
 > Boord - Get On Board
 
+_Disclaimer: this project is still in development, feel very free to try it out and open issues, but you might run in some unknown problems_
+
 Open-source Kanban/Scrum board, with the option to create multiple rows of columns 🤯
 
 - Self hosted
