@@ -12,3 +12,5 @@ docker-compose.yml
 .nuxt
 .gitignore
 .git
+dev.sh
+publish.sh
