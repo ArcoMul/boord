@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 RUN apk --no-cache add --virtual builds-deps build-base python 
 
 # Environment variables
-ENV YIPP_CONFIG production
+ENV CONFIG production
 ENV PORT 80
 
 # Copy the file from your host to your current location.

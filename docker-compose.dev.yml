@@ -1,24 +1,29 @@
 version: '3.7'
 
 services:
-        boord:
-                container_name: boord
-                build:
-                        context: .
-                        dockerfile: Dockerfile.dev
-                ports:
-                        - 3000:3000
-                depends_on:
-                        - mongodb
-        mongodb:
-               image: mongo:3.6.14
-               container_name: mongodb
-               restart: always
-               command: mongod --smallfiles --logpath=/dev/null # --quiet
-               environment:
-                       - MONGO_DATA_DIR=/data/db
-                       - MONGO_LOG_DIR=/dev/null
-               volumes:
-                       - /opt/mongo/analytics/db:/data/db
-               ports:
-                       - 27017:27017
+  boord:
+    container_name: boord
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:3.6.14
+    container_name: mongodb
+    restart: always
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - /opt/mongo/analytics/db:/data/db
+    ports:
+      - 27017:27017

@@ -7,7 +7,7 @@ deploy.sh
 debug.sh
 env.sh
 Dockerfile*
-docker-compose.yml
+docker-compose*.yml
 .dockerignore
 .nuxt
 .gitignore
