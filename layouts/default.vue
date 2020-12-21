@@ -10,7 +10,7 @@
         <b-dropdown-item href="/logout">Signout</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
-    <nuxt/>
+    <nuxt />
   </div>
 </template>
 

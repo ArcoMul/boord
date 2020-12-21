@@ -11,7 +11,9 @@
       <span class="button-board-info" @click="onBoardInfo">i</span>
       <div class="avatars">
         <img
-          v-for="member in $store.state.members.filter(m => board.members.includes(m._id.toString()))"
+          v-for="member in $store.state.members.filter((m) =>
+            board.members.includes(m._id.toString())
+          )"
           :key="member._id"
           :src="member.avatar"
           :title="member.name"
@@ -26,7 +28,10 @@
         drag-handle-selector=".section-drag-handle"
         @drop="(r) => onDrop(r)"
       >
-        <Draggable v-for="(section, sectionIndex) in $store.state.board.sections" :key="section.id">
+        <Draggable
+          v-for="(section, sectionIndex) in $store.state.board.sections"
+          :key="section.id"
+        >
           <BoardSection
             v-if="!section.deleted"
             :section="section"
@@ -52,18 +57,33 @@
         <div
           v-else
           class="section-button"
-          @click="addSectionTitle = ''; isAddingSection = true"
-        >+ Add another section</div>
+          @click="
+            addSectionTitle = ''
+            isAddingSection = true
+          "
+        >
+          + Add another section
+        </div>
       </b-row>
     </div>
 
-    <CardModal ref="CardModal" :cardId="cardModal.cardId" @close="$router.push(`/b/${slug}`)" />
+    <CardModal
+      ref="CardModal"
+      :card-id="cardModal.cardId"
+      @close="onCloseCardModal"
+    />
     <SectionModal
       ref="SectionModal"
-      :sectionId="sectionModal.sectionId"
-      @close="$router.push(`/b/${slug}`)"
+      :section-id="sectionModal.sectionId"
+      @close="onCloseSectionModal"
     />
-    <BoardModal ref="BoardModal" :show="boardModal.open" @close="$router.push(`/b/${slug}`)" />
+    <BoardModal
+      ref="BoardModal"
+      :show="openBoardModal"
+      @close="onCloseBoardModal"
+    />
+    <p class="text-white">hm: {{ openBoardModal }}</p>
+    <p class="text-white">route: {{ route }}</p>
   </b-container>
 </template>
 
@@ -71,7 +91,6 @@
 import { Container, Draggable } from 'vue-smooth-dnd'
 import BoardSection from '~/components/BoardSection.vue'
 import Editable from '~/components/Editable.vue'
-import PointsInput from '~/components/PointsInput.vue'
 import CardModal from '~/components/CardModal.vue'
 import SectionModal from '~/components/SectionModal.vue'
 import BoardModal from '~/components/BoardModal.vue'
@@ -104,16 +123,15 @@ export default {
     Draggable,
     BoardSection,
     Editable,
-    PointsInput,
     CardModal,
     SectionModal,
-    BoardModal
+    BoardModal,
   },
   async asyncData({
     $axios,
     store,
     route,
-    params: { slug, cardId, sectionId }
+    params: { slug, cardId, sectionId },
   }) {
     // We're navigating back and forth when opening modals, only fetch board
     // and cards when it's actually needed
@@ -132,19 +150,17 @@ export default {
     return {
       slug,
       cardModal: {
-        cardId
+        cardId,
       },
       sectionModal: {
-        sectionId
+        sectionId,
       },
-      boardModal: {
-        open: openBoardModal
-      }
+      openBoardModal,
     }
   },
   created() {
     socket(this.$store.state.config.web.url).emit('joinRoom', {
-      name: `board-${this.$store.state.board._id}`
+      name: `board-${this.$store.state.board._id}`,
     })
   },
   data() {
@@ -152,22 +168,24 @@ export default {
       isAddingSection: false,
       addSectionTitle: '',
       cardModal: {
-        cardId: this.cardId || null
+        cardId: this.cardId || null,
       },
       sectionModal: {
-        sectionId: this.sectionId || null
-      }
+        sectionId: this.sectionId || null,
+      },
+      openBoardModal: false,
+      route: null,
     }
   },
   head() {
     return {
-      title: this.$store.state.board.name + ' | Boord'
+      title: this.$store.state.board.name + ' | Boord',
     }
   },
   computed: {
     board() {
       return this.$store.state.board
-    }
+    },
   },
   methods: {
     getSectionPayload(sectionIndex) {
@@ -189,12 +207,25 @@ export default {
       this.cardModal.cardId = card._id
       this.$router.push(`/b/${this.slug}/c/${card._id}`)
     },
+    onCloseCardModal() {
+      this.cardModal.cardId = null
+      this.$router.push(`/b/${this.slug}`)
+    },
     onSectionInfo(section) {
       this.sectionModal.sectionId = section.id
       this.$router.push(`/b/${this.slug}/s/${this.sectionModal.sectionId}`)
     },
+    onCloseSectionModal() {
+      this.sectionModal.sectionId = null
+      this.$router.push(`/b/${this.slug}`)
+    },
     onBoardInfo(section) {
+      this.openBoardModal = true
       this.$router.push(`/b/${this.slug}/info`)
+    },
+    onCloseBoardModal() {
+      this.openBoardModal = false
+      this.$router.push(`/b/${this.slug}`)
     },
     onMoveCard({ sectionId, columnIndex, removedIndex, addedIndex, cardId }) {
       this.$store.dispatch('moveCard', {
@@ -202,7 +233,7 @@ export default {
         columnIndex,
         removedIndex,
         addedIndex,
-        cardId
+        cardId,
       })
     },
     updateBoardName($event) {
@@ -210,12 +241,12 @@ export default {
     },
     async addSection() {
       await this.$store.dispatch('addSection', {
-        name: this.addSectionTitle
+        name: this.addSectionTitle,
       })
       this.addSectionTitle = ''
       this.isAddingSection = false
-    }
-  }
+    },
+  },
 }
 </script>
 

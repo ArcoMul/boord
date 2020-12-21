@@ -5,7 +5,7 @@
     size="lg"
     hide-header
     hide-footer
-    class="board-modal"
+    modal-class="board-modal"
     :key="card._id"
     @hide="onHide"
   >
