@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV
 
 if (!selectedConfig) {
   throw new Error(
-    'No YIPP_CONFIG given, define YIPP_CONFIG=<environment> before running server'
+    'No CONFIG given, define CONFIG=<environment> before running server'
   )
 }
 
