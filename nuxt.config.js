@@ -3,6 +3,8 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
 
+  watch: ['~/modules/server/**/*.js'],
+
   /*
    ** Headers of the page
    */

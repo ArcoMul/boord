@@ -2,7 +2,6 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 const passport = require('passport')
-const chokidar = require('chokidar')
 const bodyParser = require('body-parser')
 const connectMongo = require('connect-mongo')
 const session = require('express-session')
@@ -26,7 +25,7 @@ const HOST = process.env.HOST || '0.0.0.0'
 const PORT = process.env.PORT || 3000
 
 module.exports = function ExpressModule() {
-  this.nuxt.hook('render:before', (renderer) => {
+  this.nuxt.hook('render:before', renderer => {
     const _routesPath = './routes'
 
     const app = express()
@@ -38,14 +37,14 @@ module.exports = function ExpressModule() {
     // overwrite nuxt.server.listen()
     this.nuxt.server.listen = (port, host) => {
       console.log(`listen on port ${port || PORT} at host ${host || HOST}`)
-      return new Promise((resolve) =>
+      return new Promise(resolve =>
         server.listen(port || PORT, host || HOST, resolve)
       )
     }
     // close this server on 'close' event
-    this.nuxt.hook('close', () => new Promise(server.close))
+    this.nuxt.hook('close', () => server.close())
 
-    io.on('connection', function (socket) {
+    io.on('connection', function(socket) {
       cardSocket(io, socket)
       boardSocket(io, socket)
       roomSocket(io, socket)
@@ -62,7 +61,7 @@ module.exports = function ExpressModule() {
         resave: false,
         saveUninitialized: false,
         cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }, // one month
-        store: new MongoStore({ mongooseConnection: mongoose.connection }),
+        store: new MongoStore({ mongooseConnection: mongoose.connection })
       })
     )
 
@@ -100,22 +99,6 @@ module.exports = function ExpressModule() {
 
     // Routes
     app.use('', require(routesPath))
-
-    // handle hot loading of routes
-    // re-initializes everything when file changes inside routes dir
-    if (this.options.dev) {
-      const watcher = chokidar.watch(__dirname).on('change', (path) => {
-        console.log('on change', path)
-        const keys = Object.keys(require.cache).filter((k) =>
-          k.includes(__dirname)
-        )
-        keys.forEach((k) => delete require.cache[k])
-      })
-
-      this.nuxt.hook('close', () => {
-        watcher.close()
-      })
-    }
 
     this.addServerMiddleware(app)
   })
