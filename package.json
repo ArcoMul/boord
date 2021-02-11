@@ -5,7 +5,7 @@
   "author": "Arco Mul",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development nuxt",
+    "dev": "bin/dev.sh",
     "build": "nuxt build",
     "start": "NODE_ENV=production nuxt start",
     "generate": "nuxt generate",
