@@ -82,8 +82,6 @@
       :show="openBoardModal"
       @close="onCloseBoardModal"
     />
-    <p class="text-white">hm: {{ openBoardModal }}</p>
-    <p class="text-white">route: {{ route }}</p>
   </b-container>
 </template>
 
