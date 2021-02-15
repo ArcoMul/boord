@@ -10,13 +10,15 @@ Open-source Kanban/Scrum board, with the option to create multiple rows of colum
 - Columns **and** rows
 - Like-Trello: multiple boards, cards, assign to card, ~~card comments~~
 
-!["Screenshot of Boord](screenshot.jpg)
-
 ## Why?
 
 Having worked quite a bit with Trello there has always been the desire to work with multiple teams in one board, or to work with one team on multiple subprojects. This open-source variant enables listing all those subprojects as rows in one scrum board.
 
 Initially build to support the development of museum exhibits, where one team works on a bunch of installations. Having 15 Trello boards wasn't an option, and 1 Trello board for all 15 subprojects didn't work either. This solved that use case.
+
+## Screenshots
+
+!["Screenshot of Boord](screenshot.jpg)
 
 ## Future plans
 
