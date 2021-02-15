@@ -1,8 +1,7 @@
 const pkg = require('./package')
 
 module.exports = {
-  mode: 'universal',
-
+  // Modules aren't watched by default
   watch: ['~/modules/server/**/*.js'],
 
   /*
@@ -49,12 +48,23 @@ module.exports = {
     'bootstrap-vue/nuxt',
     '~/modules/server'
   ],
-  /*
-   ** Axios module configuration
-   */
+
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    // See: https://axios.nuxtjs.org/options
   },
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.BROWSER_BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL
+    }
+  },
+
   /*
    ** Router
    */

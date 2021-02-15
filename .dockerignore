@@ -3,14 +3,10 @@ npm-debug.log
 .docker
 docker-machine
 yippctl
-deploy.sh
-debug.sh
-env.sh
 Dockerfile*
 docker-compose*.yml
 .dockerignore
 .nuxt
 .gitignore
 .git
-dev.sh
-publish.sh
+.env
