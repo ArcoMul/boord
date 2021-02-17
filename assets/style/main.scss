@@ -101,3 +101,10 @@ body {
     border-radius: 3px;
   }
 }
+
+/**
+ * smooth-dnd overwrites
+ */
+.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+  overflow: visible !important;
+}

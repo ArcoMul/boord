@@ -1,87 +1,93 @@
 <template>
-  <b-container fluid>
-    <div class="title">
-      <b-link class="back" to="/">&larr;</b-link>
-      <Editable
-        tag="h1"
-        :content="$store.state.board.name"
-        close-on-break
-        @update="updateBoardName"
-      />
-      <span class="button-board-info" @click="onBoardInfo">i</span>
-      <div class="avatars">
-        <img
-          v-for="member in $store.state.members.filter((m) =>
-            board.members.includes(m._id.toString())
-          )"
-          :key="member._id"
-          :src="member.avatar"
-          :title="member.name"
-          class="avatar"
-        />
-      </div>
-    </div>
-    <div class="board">
-      <Container
-        group-name="section"
-        :get-child-payload="(index) => getSectionPayload(index)"
-        drag-handle-selector=".section-drag-handle"
-        @drop="(r) => onDrop(r)"
-      >
-        <Draggable
-          v-for="(section, sectionIndex) in $store.state.board.sections"
-          :key="section.id"
-        >
-          <BoardSection
-            v-if="!section.deleted"
-            :section="section"
-            :columns="$store.state.board.columns"
-            @update="(section) => onSectionUpdate(sectionIndex, section)"
-            @cardClick="onCardClick"
-            @sectionInfo="onSectionInfo"
-            @moveCard="onMoveCard"
+  <b-container fluid class="board-page-container">
+    <b-row>
+      <b-col>
+        <div class="title">
+          <b-link class="back" to="/">&larr;</b-link>
+          <Editable
+            tag="h1"
+            :content="$store.state.board.name"
+            close-on-break
+            @update="updateBoardName"
           />
-        </Draggable>
-      </Container>
-      <b-row class="add-section-row">
-        <Editable
-          v-if="isAddingSection"
-          tag="h2"
-          class="section-title"
-          focus
-          :content="addSectionTitle"
-          @update="addSectionTitle = $event"
-          @submit="addSection"
-          @blur="isAddingSection = false"
-        />
-        <div
-          v-else
-          class="section-button"
-          @click="
-            addSectionTitle = ''
-            isAddingSection = true
-          "
-        >
-          + Add another section
+          <span class="button-board-info" @click="onBoardInfo">i</span>
+          <div class="avatars">
+            <img
+              v-for="member in $store.state.members.filter((m) =>
+                board.members.includes(m._id.toString())
+              )"
+              :key="member._id"
+              :src="member.avatar"
+              :title="member.name"
+              class="avatar"
+            />
+          </div>
         </div>
-      </b-row>
-    </div>
+        <div class="board">
+          <Container
+            group-name="section"
+            :get-child-payload="(index) => getSectionPayload(index)"
+            drag-handle-selector=".section-drag-handle"
+            @drop="(r) => onDrop(r)"
+          >
+            <Draggable
+              v-for="(section, sectionIndex) in $store.state.board.sections"
+              :key="section.id"
+            >
+              <BoardSection
+                v-if="!section.deleted"
+                :section="section"
+                :columns="$store.state.board.columns"
+                @update="(section) => onSectionUpdate(sectionIndex, section)"
+                @cardClick="onCardClick"
+                @sectionInfo="onSectionInfo"
+                @moveCard="onMoveCard"
+              />
+            </Draggable>
+          </Container>
+          <b-row class="add-section-row">
+            <b-col>
+              <Editable
+                v-if="isAddingSection"
+                tag="h2"
+                class="section-title"
+                focus
+                :content="addSectionTitle"
+                @update="addSectionTitle = $event"
+                @submit="addSection"
+                @blur="isAddingSection = false"
+              />
+              <div
+                v-else
+                class="section-button"
+                @click="
+                  addSectionTitle = ''
+                  isAddingSection = true
+                "
+              >
+                + Add another section
+              </div>
+            </b-col>
+          </b-row>
+        </div>
 
-    <CardModal
-      ref="CardModal"
-      :card-id="cardModal.cardId"
-      @close="onCloseCardModal"
-    />
-    <SectionModal
-      ref="SectionModal"
-      :section-id="sectionModal.sectionId"
-      @close="onCloseSectionModal"
-    />
-    <BoardModal
-      ref="BoardModal"
-      :show="openBoardModal"
-      @close="onCloseBoardModal"
-    />
+        <CardModal
+          ref="CardModal"
+          :card-id="cardModal.cardId"
+          @close="onCloseCardModal"
+        />
+        <SectionModal
+          ref="SectionModal"
+          :section-id="sectionModal.sectionId"
+          @close="onCloseSectionModal"
+        />
+        <BoardModal
+          ref="BoardModal"
+          :show="openBoardModal"
+          @close="onCloseBoardModal"
+        />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -249,14 +255,19 @@ export default {
 </script>
 
 <style lang="scss">
+.board-page-container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
 .board > .smooth-dnd-container {
   flex: 0 !important;
 }
 
 .title {
   display: flex;
-  margin-top: 30px;
-  padding-left: 15px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   a.back {
     flex: 0 0 30px;
     color: #fff;
@@ -295,6 +306,7 @@ export default {
   .avatars {
     margin-top: 4px;
     margin-left: 5px;
+    line-height: 0;
     .avatar {
       width: 25px;
       height: 25px;
@@ -312,19 +324,6 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 15px;
-}
-
-.row {
-  padding: 0 30px;
-}
-
-.board-section {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  .board-col {
-    // background-color: rgb(170, 170, 170);
-  }
 }
 
 .section-title {
@@ -338,24 +337,14 @@ export default {
 }
 
 .board-col {
-  margin: 0 5px;
-  flex-grow: 1;
-  flex-basis: 0;
   padding: 5px;
   background-color: #ccc;
   border-radius: 2px;
-  max-width: 280px;
   display: flex;
   flex-direction: column;
   position: relative;
   max-height: 60vh;
   overflow-y: auto;
-  &:first-child {
-    margin-left: 0;
-  }
-  &:last-child {
-    margin-right: 0;
-  }
   &.start-col {
     display: flex;
     flex-direction: row;
@@ -380,8 +369,10 @@ export default {
     max-height: 60vh;
     overflow-y: auto;
     scrollbar-width: thin;
-    padding: 0 2px 0 2px;
     scrollbar-color: #aaa #ccc;
+
+    // So that the cards don't touch the scrollbar
+    padding: 0 2px 0 2px;
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -415,9 +406,8 @@ export default {
   border-radius: 3px;
   margin-bottom: 5px;
   cursor: pointer;
-  width: 100%;
   &:last-child {
-    margin: 0;
+    margin-bottom: 0;
   }
   & > div {
     min-height: 23px;
@@ -453,11 +443,11 @@ export default {
 }
 
 .add-section-row {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .section-button {
+  display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
   cursor: pointer;

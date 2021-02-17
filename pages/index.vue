@@ -39,15 +39,11 @@
 </template>
 
 <script>
-import BoardSection from '~/components/BoardSection.vue'
-import Editable from '~/components/Editable.vue'
-import PointsInput from '~/components/PointsInput.vue'
-import ConfirmLink from '~/components/ConfirmLink.vue'
 import BoardOverview from '~/components/BoardOverview.vue'
 
 export default {
   middleware: 'auth',
-  components: { ConfirmLink, BoardOverview },
+  components: { BoardOverview },
   async asyncData({ $axios, store }) {
     const { data: boards } = await $axios.get('/api/boards')
     return {

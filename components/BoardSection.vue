@@ -25,57 +25,78 @@
       </b-col>
     </b-row>
     <b-row>
-      <div
-        class="board-col"
-        v-for="(cards, columnIndex) in section.cards"
-        :key="section.id+columnIndex"
-      >
-        <h2>{{columns[columnIndex].title}}</h2>
-        <Container
-          group-name="col"
-          :get-child-payload="(index) => getCardPayload(columnIndex, index)"
-          @drop="(r) => onDrop(columnIndex, r)"
-        >
-          <Draggable
-            v-for="card in getcards(cards)"
-            :key="section.id+columnIndex+card._id"
-            class="bcard card-bcard"
+      <b-col xl="10">
+        <b-row class="mx-n1">
+          <b-col
+            v-for="(cards, columnIndex) in section.cards"
+            :key="section.id + columnIndex"
+            class="px-1"
           >
-            <div @click="$emit('cardClick', card)">
-              <div class="bcard-title">{{card.title}}</div>
-              <span class="points" v-if="card.points">{{card.points}}</span>
-              <div v-if="card.text || (card.members && card.members.length > 0)" class="extras">
-                <span class="description" v-if="card.text"></span>
-                <span class="members" v-if="card.members && card.members.length > 0">
-                  <img
-                    v-for="member in card.members"
-                    :key="member"
-                    :src="$store.getters.membersMap[member].avatar"
-                  />
-                </span>
+            <div class="board-col h-100">
+              <h2>{{ columns[columnIndex].title }}</h2>
+              <Container
+                group-name="col"
+                :get-child-payload="index => getCardPayload(columnIndex, index)"
+                @drop="r => onDrop(columnIndex, r)"
+              >
+                <Draggable
+                  v-for="card in getcards(cards)"
+                  :key="section.id + columnIndex + card._id"
+                  class="bcard card-bcard"
+                >
+                  <div @click="$emit('cardClick', card)">
+                    <div class="bcard-title">{{ card.title }}</div>
+                    <span class="points" v-if="card.points">{{
+                      card.points
+                    }}</span>
+                    <div
+                      v-if="
+                        card.text || (card.members && card.members.length > 0)
+                      "
+                      class="extras"
+                    >
+                      <span class="description" v-if="card.text"></span>
+                      <span
+                        class="members"
+                        v-if="card.members && card.members.length > 0"
+                      >
+                        <img
+                          v-for="member in card.members"
+                          :key="member"
+                          :src="$store.getters.membersMap[member].avatar"
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </Draggable>
+              </Container>
+
+              <!-- Add card -->
+              <div
+                v-if="columnIndex === 0 && isAddingCard"
+                class="bcard add-card-card"
+              >
+                <Editable
+                  class="add-card-editable"
+                  :content="addCardTitle"
+                  spellcheck
+                  focus
+                  @update="addCardTitle = $event"
+                  @submit="addCard"
+                  @blur="isAddingCard = false"
+                />
+              </div>
+              <div
+                v-else-if="columnIndex === 0"
+                class="add-card"
+                @click="isAddingCard = true"
+              >
+                + Add another card
               </div>
             </div>
-          </Draggable>
-        </Container>
-
-        <!-- Add card -->
-        <div v-if="columnIndex === 0 && isAddingCard" class="bcard add-card-card">
-          <Editable
-            class="add-card-editable"
-            :content="addCardTitle"
-            spellcheck
-            focus
-            @update="addCardTitle = $event"
-            @submit="addCard"
-            @blur="isAddingCard = false"
-          />
-        </div>
-        <div
-          v-else-if="columnIndex === 0"
-          class="add-card"
-          @click="isAddingCard = true"
-        >+ Add another card</div>
-      </div>
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
   </div>
 </template>
@@ -135,7 +156,7 @@ export default {
       })
       this.addCardTitle = ''
     },
-    async updateSectionName($event) {
+    updateSectionName($event) {
       this.$store.dispatch('updateSectionName', {
         id: this.section.id,
         name: $event
@@ -175,23 +196,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.board-section.toggled {
-  overflow-y: hidden;
-  height: 26px;
-  overflow-x: hidden;
-}
-
-.board-section:hover {
-  .section-drag-handle {
-    visibility: visible;
+.board-section {
+  margin-bottom: 2rem;
+  &:hover {
+    .section-drag-handle {
+      visibility: visible;
+    }
+  }
+  &.toggled {
+    overflow-y: hidden;
+    height: 26px;
+    overflow-x: hidden;
+  }
+  .section-title.title-border {
+    border: 1px solid #6c6c6c;
+    padding: 1px 10px;
+    border-radius: 31px;
   }
 }
 
-.section-title.title-border {
-  border: 1px solid #6c6c6c;
-  padding: 1px 10px;
-  border-radius: 31px;
-}
 .section-title.points {
   margin-left: 15px;
   color: #aaa;
@@ -232,9 +255,11 @@ export default {
 }
 
 .add-card {
-  padding: 5px 7px;
+  padding: 5.5px 7px;
   border-radius: 3px;
   margin-top: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.5);
   &:hover {
@@ -245,6 +270,8 @@ export default {
 
 .add-card-card {
   margin-top: 5px !important;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .add-card-editable {
@@ -262,7 +289,7 @@ export default {
   height: 19px;
   width: 8px;
   margin-top: -5px;
-  margin-left: -25px;
+  margin-left: -10px;
   opacity: 0.5;
 }
 </style>
