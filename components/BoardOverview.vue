@@ -1,7 +1,14 @@
 <template>
-  <b-row class="boards">
-    <b-col v-for="board in boards" :key="board._id" cols="2">
-      <b-link class="board-tile" :to="`/b/${board.slug}`">
+  <b-row class="boards mx-n2">
+    <b-col
+      v-for="board in boards"
+      :key="board._id"
+      cols="4"
+      md="3"
+      lg="2"
+      class="px-2"
+    >
+      <b-link class="board-tile mb-3" :to="`/b/${board.slug}`">
         <span>{{ board.name }}</span>
         <confirm-link
           tag="b-link"
@@ -12,11 +19,13 @@
         ></confirm-link>
       </b-link>
     </b-col>
-    <b-col cols="2" v-if="createNewBoard">
+    <b-col v-if="createNewBoard" cols="4" md="3" lg="2" class="px-2">
       <b-link
         class="board-tile add-tile outline"
         @click="() => $emit('addBoard')"
-      >Create new board...</b-link>
+      >
+        Create new<br />board...
+      </b-link>
     </b-col>
   </b-row>
 </template>
@@ -48,7 +57,6 @@ export default {
   padding: 15px;
   color: #333;
   font-weight: bold;
-  margin-bottom: 30px;
   position: relative;
   &:hover {
     text-decoration: none;

@@ -1,5 +1,6 @@
 <template>
   <b-container>
+
     <b-row class="title-row">
       <b-col>
         <h1>Boards</h1>
@@ -11,6 +12,7 @@
       @removeBoard="(id) => removeBoard(id)"
       @addBoard="showCreateBoardModal = true"
     />
+
     <b-row>
       <b-col class="title-row">
         <h2>Other boards</h2>
@@ -20,8 +22,13 @@
       :boards="boards.filter(b => !b.members.includes(user._id.toString()))"
       @removeBoard="(id) => removeBoard(id)"
     />
+
     <!-- Create new board modal -->
-    <b-modal v-model="showCreateBoardModal" title="Create new board" hide-footer>
+    <b-modal
+      v-model="showCreateBoardModal"
+      title="Create new board"
+      hide-footer
+    >
       <b-form @submit.prevent="onNewBoardSubmit">
         <b-form-group label="Name" label-for="name-input">
           <b-form-input
@@ -35,6 +42,7 @@
         <b-button class="float-right" type="submit" variant="primary">Create</b-button>
       </b-form>
     </b-modal>
+
   </b-container>
 </template>
 
