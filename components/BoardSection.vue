@@ -202,55 +202,108 @@ export default {
     .section-drag-handle {
       visibility: visible;
     }
+    .section-title.info {
+      visibility: visible;
+    }
   }
   &.toggled {
     overflow-y: hidden;
     height: 26px;
     overflow-x: hidden;
   }
-  .section-title.title-border {
+}
+
+.section-title {
+  min-width: 10px;
+  color: #eee;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 11px;
+  display: inline-block;
+  outline: 0;
+
+  &.title-border {
     border: 1px solid #6c6c6c;
     padding: 1px 10px;
     border-radius: 31px;
   }
+
+  &.points {
+    margin-left: 15px;
+    color: #aaa;
+    font-size: 14px;
+    .done,
+    .total {
+      color: #ddd;
+    }
+  }
+
+  &.info {
+    width: 25px;
+    padding: 1px 0px;
+    text-align: center;
+    margin-left: 7px;
+    visibility: hidden;
+    font-size: 14px;
+    &:hover {
+      background-color: #444;
+      cursor: pointer;
+    }
+    &.toggle {
+      mask-image: url(/cheveron-left.svg);
+      background-color: #eee;
+      transform: rotateZ(270deg);
+      transition: transform 0.1s ease-in-out;
+    }
+    &.toggled {
+      transform: rotateZ(180deg);
+    }
+    &.force-visible {
+      visibility: visible;
+    }
+  }
 }
 
-.section-title.points {
-  margin-left: 15px;
-  color: #aaa;
-  font-size: 14px;
-  .done,
-  .total {
-    color: #ddd;
+.bcard {
+  position: relative;
+  padding: 5px 7px 5px 7px;
+  background-color: #fff;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  &:last-child {
+    margin-bottom: 0;
   }
-}
-
-.section-title.info {
-  width: 25px;
-  padding: 1px 0px;
-  text-align: center;
-  margin-left: 7px;
-  visibility: hidden;
-  font-size: 14px;
-  &:hover {
-    background-color: #444;
-    cursor: pointer;
+  & > div {
+    min-height: 23px;
   }
-  &.toggle {
-    mask-image: url(/cheveron-left.svg);
-    background-color: #eee;
-    transform: rotateZ(-90deg);
+  .bcard-title {
+    padding-right: 7px;
   }
-  &.toggled {
-    transform: rotateZ(180deg);
+  .points {
+    position: absolute;
+    right: 11px;
+    top: 5px;
+    color: #999;
   }
-  &.force-visible {
-    visibility: visible;
-  }
-}
-.board-section:hover {
-  .section-title.info {
-    visibility: visible;
+  .extras {
+    height: 23px;
+    display: flex;
+    .description {
+      margin-top: 6px;
+      margin-right: 5px;
+      background-color: #999;
+      mask-image: url('/description.svg');
+      width: 15px;
+      height: 13px;
+      display: block;
+    }
+    .members img {
+      width: 23px;
+      height: 23px;
+      border-radius: 23px;
+      margin-right: 5px;
+    }
   }
 }
 

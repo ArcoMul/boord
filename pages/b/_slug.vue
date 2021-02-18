@@ -254,40 +254,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .board-page-container {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-.board > .smooth-dnd-container {
-  flex: 0 !important;
-}
-
 .title {
-  display: flex;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  a.back {
-    flex: 0 0 30px;
-    color: #fff;
-    font-size: 24px;
-    margin: 0;
-    line-height: 1.2;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  h1 {
-    display: inline-block;
-    min-width: 10px;
-    margin: 0;
-    outline: 0;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    padding-right: 15px;
-  }
   .button-board-info {
     flex: 0 0 25px;
     border-radius: 100%;
@@ -324,122 +297,6 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.section-title {
-  min-width: 10px;
-  color: #eee;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 11px;
-  display: inline-block;
-  outline: 0;
-}
-
-.board-col {
-  padding: 5px;
-  background-color: #ccc;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  max-height: 60vh;
-  overflow-y: auto;
-  &.start-col {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    div {
-      width: 100%;
-      font-weight: bold;
-    }
-  }
-  &.col-top {
-    border-radius: 5px 5px 0 0;
-    border: 0;
-  }
-  &.col-bottom {
-    height: 30px;
-    border-radius: 0 0 5px 5px;
-  }
-  &.col-middle {
-    border: 0;
-  }
-  .smooth-dnd-container {
-    max-height: 60vh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #aaa #ccc;
-
-    // So that the cards don't touch the scrollbar
-    padding: 0 2px 0 2px;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: #ccc;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: #aaa;
-    }
-  }
-  h2 {
-    text-align: left;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0;
-    line-height: 18px;
-    padding: 5px 0 11px 5px;
-    color: #777;
-  }
-}
-
-.smooth-dnd-container {
-  flex: 2;
-}
-
-.bcard {
-  position: relative;
-  padding: 5px 7px 5px 7px;
-  background-color: #fff;
-  border-radius: 3px;
-  margin-bottom: 5px;
-  cursor: pointer;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  & > div {
-    min-height: 23px;
-  }
-  .bcard-title {
-    padding-right: 7px;
-  }
-  .points {
-    position: absolute;
-    right: 11px;
-    top: 5px;
-    color: #999;
-  }
-  .extras {
-    height: 23px;
-    display: flex;
-    .description {
-      margin-top: 6px;
-      margin-right: 5px;
-      background-color: #999;
-      mask-image: url('/description.svg');
-      width: 15px;
-      height: 13px;
-      display: block;
-    }
-    .members img {
-      width: 23px;
-      height: 23px;
-      border-radius: 23px;
-      margin-right: 5px;
-    }
-  }
 }
 
 .add-section-row {

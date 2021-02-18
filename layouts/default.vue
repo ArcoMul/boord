@@ -46,6 +46,7 @@ html {
   font-size: 16px;
   text-align: center;
   opacity: 0.5;
+  z-index: 10;
   &:hover {
     opacity: 1;
   }

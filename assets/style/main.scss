@@ -3,102 +3,38 @@
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/bootstrap-vue/dist/bootstrap-vue.css';
 
+@import './components/board-modal';
+@import './components/board-section';
+@import './markdown';
+
 body {
   background-color: #333;
   font-size: 0.95rem;
 }
 
-.board-modal {
-  .modal-content {
-    border: 0;
-  }
-  .modal-body {
-    padding-top: 30px;
-    padding-bottom: 45px;
-  }
-  h2 {
-    margin-bottom: 30px;
+.title {
+  display: flex;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  a.back {
+    flex: 0 0 30px;
+    color: #fff;
     font-size: 24px;
-    font-weight: bold;
-  }
-  h3 {
-    margin-bottom: 15px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  p {
-    min-height: 250px;
-    background-color: #f3f3f3;
-    margin-bottom: 30px;
-    padding: 15px 22px;
-    border-radius: 3px;
-    &:last-child {
-      margin-bottom: 0;
+    margin: 0;
+    line-height: 1.2;
+    &:hover {
+      text-decoration: none;
     }
-    &.markdown {
-      line-height: 20px;
-    }
-    & > p {
-      padding: 0;
-      margin-bottom: 20px;
-      min-height: auto;
-      line-height: 20px;
-    }
-  }
-  input.points-input {
-    border: #ccc solid 1px;
-    padding: 2px 3px 2px 7px;
-    height: 32px;
-    margin-top: 7px;
-  }
-  hr {
-    margin: 30px 0;
-    border: 0;
-    border-bottom: 1px solid #ddd;
-  }
-  .remove-button {
-    width: 100%;
-  }
-}
-
-.markdown {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: bold;
-    margin: 0 0 15px 0;
-    padding: 7px 0 0 0;
   }
   h1 {
-    font-size: 20px;
-  }
-  h2 {
-    font-size: 18px;
-  }
-  h3 {
-    font-size: 16px;
-  }
-  h4,
-  h5,
-  h6 {
-    font-size: 14px;
-  }
-  ul {
-    margin: 0 0 15px 0;
-    padding: 0 0 0 15px;
-  }
-  hr {
-    margin: 30px 0;
-    border: 0;
-    border-bottom: 1px solid #ddd;
-  }
-  pre {
-    padding: 15px 0;
-    background-color: #fafafa;
-    border-radius: 3px;
+    display: inline-block;
+    min-width: 10px;
+    margin: 0;
+    outline: 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    padding-right: 15px;
   }
 }
 
@@ -107,4 +43,10 @@ body {
  */
 .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
   overflow: visible !important;
+}
+.smooth-dnd-container {
+  flex: 2;
+}
+.board > .smooth-dnd-container {
+  flex: 0 !important;
 }

@@ -1,0 +1,40 @@
+.markdown {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    padding: 7px 0 0 0;
+  }
+  h1 {
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 18px;
+  }
+  h3 {
+    font-size: 16px;
+  }
+  h4,
+  h5,
+  h6 {
+    font-size: 14px;
+  }
+  ul {
+    margin: 0 0 15px 0;
+    padding: 0 0 0 15px;
+  }
+  hr {
+    margin: 30px 0;
+    border: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  pre {
+    padding: 15px 0;
+    background-color: #fafafa;
+    border-radius: 3px;
+  }
+}

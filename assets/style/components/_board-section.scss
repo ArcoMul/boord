@@ -1,0 +1,60 @@
+.board-section {
+  .board-col {
+    padding: 5px;
+    background-color: #ccc;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    max-height: 60vh;
+    overflow-y: auto;
+    &.start-col {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      div {
+        width: 100%;
+        font-weight: bold;
+      }
+    }
+    &.col-top {
+      border-radius: 5px 5px 0 0;
+      border: 0;
+    }
+    &.col-bottom {
+      height: 30px;
+      border-radius: 0 0 5px 5px;
+    }
+    &.col-middle {
+      border: 0;
+    }
+    .smooth-dnd-container {
+      max-height: 60vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #aaa #ccc;
+
+      // So that the cards don't touch the scrollbar
+      padding: 0 2px 0 2px;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: #ccc;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #aaa;
+      }
+    }
+    h2 {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
+      line-height: 18px;
+      padding: 5px 0 11px 5px;
+      color: #777;
+    }
+  }
+}
