@@ -25,7 +25,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col xl="10">
+      <b-col xl="10" class="col-container">
         <b-row class="mx-n1">
           <b-col
             v-for="(cards, columnIndex) in section.cards"
@@ -260,6 +260,25 @@ export default {
     }
     &.force-visible {
       visibility: visible;
+    }
+  }
+}
+
+@media (max-width: 768px)
+{
+  .col-container {
+    overflow-x: scroll;
+    padding: 0;
+    margin: 0 -15px;
+    width: calc(100% + 30px);
+    & > .row {
+      min-width: 1140px;
+      & > .col:first-child {
+        margin-left: 1rem;
+      }
+      & > .col:last-child {
+        margin-right: 1rem;
+      }
     }
   }
 }
