@@ -3,7 +3,10 @@ const config = require('./config')
 
 let db
 
-mongoose.connect(config.database.url)
+mongoose.connect(config.database.url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 mongoose.Promise = global.Promise
 
 mongoose.connection.on('connected', () => {
