@@ -11,7 +11,7 @@
       <b-link class="board-tile mb-3" :to="`/b/${board.slug}`">
         <span>{{ board.name }}</span>
         <confirm-link
-          tag="b-link"
+          tag="div"
           class="remove"
           title="Remove board"
           :message="`Are you sure you want to remove the board ${board.name}`"
@@ -37,14 +37,14 @@ export default {
   components: { ConfirmLink },
   props: {
     boards: Array,
-    createNewBoard: Boolean
+    createNewBoard: Boolean,
   },
   computed: {
     user() {
       return this.$store.state.user
-    }
+    },
   },
-  methods: {}
+  methods: {},
 }
 </script>
 
