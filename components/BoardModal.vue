@@ -21,7 +21,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="12">
+      <b-col cols="8">
         <EditableMarkdown
           tag="p"
           class="markdown"
@@ -30,35 +30,40 @@
           :content="board.text"
           @update="updateBoardText($event)"
         />
-        <hr />
-
+      </b-col>
+      <b-col cols="4">
         <div class="members">
-          <h2>Members</h2>
-          <b-card-group v-if="board.members.length > 0">
-            <b-card
-              v-for="member in members.filter(m => board.members.includes(m._id.toString()))"
-              :key="member._id"
-              :img-src="member.avatar"
-            >
-              {{ member.name }}
-              <span class="remove" @click="() => onRemoveMember(member._id)">
-                <span class="icon"></span>
-              </span>
-            </b-card>
-          </b-card-group>
+          <h3>Members</h3>
+          <UserCircles
+            v-if="board.members.length > 0"
+            :users="boardMembers"
+            @onRemove="user => onRemoveMember(user._id)"
+          />
           <i v-else>No members yet</i>
           <b-form @submit.prevent="onAddMember">
-            <b-input-group prepend="Add member" class="mt-3">
-              <b-form-input v-model="newMember" list="member-name-list" autocomplete="off"></b-form-input>
+            <b-input-group class="mt-3">
+              <b-form-input
+                v-model="newMember"
+                list="member-name-list"
+                autocomplete="off"
+                placeholder="Enter name..."
+              ></b-form-input>
               <b-input-group-append>
                 <b-button type="submit" variant="info">Add</b-button>
               </b-input-group-append>
             </b-input-group>
           </b-form>
           <datalist id="member-name-list">
-            <option v-for="user in users" :key="user.email" :value="user.email">{{ user.name }}</option>
+            <option v-for="user in users" :key="user.email" :value="user.email">
+              {{ user.name }}
+            </option>
           </datalist>
         </div>
+
+        <hr />
+
+        <h3>Labels</h3>
+        <LabelsEditor :labels="board.labels" @update="onLabelsUpdate" />
       </b-col>
     </b-row>
   </b-modal>
@@ -67,18 +72,18 @@
 <script>
 import Editable from '~/components/Editable.vue'
 import EditableMarkdown from '~/components/EditableMarkdown.vue'
-import PointsInput from '~/components/PointsInput.vue'
-import ConfirmLink from '~/components/ConfirmLink.vue'
 import Modal from '~/components/mixins/Modal'
+import UserCircles from '~/components/UserCircles.vue'
+import LabelsEditor from '~/components/LabelsEditor.vue'
 
 export default {
-  mixins: [Modal],
   components: {
     Editable,
     EditableMarkdown,
-    PointsInput,
-    ConfirmLink
+    UserCircles,
+    LabelsEditor
   },
+  mixins: [Modal],
   props: {
     show: {
       type: Boolean
@@ -91,24 +96,29 @@ export default {
       users: []
     }
   },
-  async created() {
-    if (!this.board.text) {
-      this.board.text = ''
-    }
-    this.users = await this.$axios.$get('/api/users')
-  },
   computed: {
     board() {
       return this.$store.state.board
     },
     members() {
       return this.$store.state.members
+    },
+    boardMembers() {
+      return this.members.filter(member =>
+        this.board.members.includes(member._id.toString())
+      )
     }
   },
   watch: {
     show() {
       this.showModal = this.show
+    },
+  },
+  async created() {
+    if (!this.board.text) {
+      this.board.text = ''
     }
+    this.users = await this.$axios.$get('/api/users')
   },
   methods: {
     updateBoardName($event) {
@@ -126,8 +136,10 @@ export default {
       this.$store.dispatch('addBoardMember', { email: this.newMember })
     },
     onRemoveMember($event) {
-      console.log('remove')
       this.$store.dispatch('removeBoardMember', { id: $event })
+    },
+    onLabelsUpdate(labels) {
+      this.$store.dispatch('updateBoard', { labels: labels })
     }
   }
 }

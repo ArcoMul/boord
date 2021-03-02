@@ -23,6 +23,11 @@
     </b-row>
     <b-row>
       <b-col cols="8">
+        <CardLabelSelector
+          :labels="board.labels"
+          :selected="card.labels"
+          class="mb-3"
+        />
         <EditableMarkdown
           tag="p"
           class="markdown"
@@ -43,14 +48,10 @@
         </div>
         <div class="members">
           <h3>Members</h3>
-          <div class="avatars">
-            <span v-for="member in members" :key="member._id" :title="member.name">
-              <img :src="member.avatar" />
-              <span class="remove" @click="onRemoveMember(card, member._id)">
-                <span class="icon" />
-              </span>
-            </span>
-          </div>
+          <UserCircles
+            :users="members"
+            @onRemove="member => onRemoveMember(card, member._id)"
+          />
           <b-select
             v-model="addMemberSelected"
             :options="boardMemberOptions"
@@ -87,6 +88,8 @@ import EditableMarkdown from '~/components/EditableMarkdown.vue'
 import PointsInput from '~/components/PointsInput.vue'
 import ConfirmLink from '~/components/ConfirmLink.vue'
 import Modal from '~/components/mixins/Modal'
+import UserCircles from '~/components/UserCircles.vue'
+import CardLabelSelector from '~/components/CardLabelSelector.vue'
 
 export default {
   mixins: [Modal],
@@ -94,7 +97,9 @@ export default {
     Editable,
     EditableMarkdown,
     PointsInput,
-    ConfirmLink
+    ConfirmLink,
+    UserCircles,
+    CardLabelSelector
   },
   props: {
     cardId: {
@@ -130,6 +135,9 @@ export default {
     },
     members() {
       return this.card.members.map(id => this.$store.getters.membersMap[id])
+    },
+    board() {
+      return this.$store.state.board
     }
   },
   watch: {
@@ -181,42 +189,6 @@ export default {
 <style scoped lang="scss">
 .points {
   margin-bottom: 30px;
-}
-.members .avatars {
-  margin: 0 0 15px 0;
-}
-.members .avatars span {
-  position: relative;
-  border-radius: 40px;
-  width: 40px;
-  height: 40px;
-  display: block;
-}
-.members .avatars span img {
-  width: 100%;
-  border-radius: 40px;
-}
-.members .avatars span .remove {
-  border-radius: 40px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: none;
-}
-.members .avatars span:hover .remove {
-  display: block;
-}
-.members .avatars span .remove .icon {
-  background-color: #fff;
-  mask-image: url('/remove.svg');
-  width: 20px;
-  height: 20px;
-  display: block;
-  margin: 10px;
 }
 .add-myself-button {
   width: 100%;

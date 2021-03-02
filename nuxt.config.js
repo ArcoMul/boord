@@ -35,7 +35,8 @@ module.exports = {
       src: '~/plugins/socket.io.js',
       ssr: false
     },
-    { src: '~/plugins/localStorage.js', ssr: false }
+    { src: '~/plugins/localStorage.js', ssr: false },
+    { src: '~/plugins/click-outside.js', ssr: false }
   ],
 
   /*
