@@ -45,10 +45,12 @@
                   class="bcard card-bcard"
                 >
                   <div @click="$emit('cardClick', card)">
-                    <div class="bcard-title">{{ card.title }}</div>
-                    <span v-if="card.points" class="points">{{
-                      card.points
-                    }}</span>
+                    <div class="title-row">
+                      <div class="bcard-title">{{ card.title }}</div>
+                      <span v-if="card.points" class="points">{{
+                        card.points
+                      }}</span>
+                    </div>
                     <div
                       v-if="getTotalTodos(card.text) > 0"
                       class="todo-progress"
@@ -60,11 +62,11 @@
                     </div>
                     <div
                       v-if="
-                        card.text || (card.members && card.members.length > 0)
+                        card.text.trim() || (card.members && card.members.length > 0)
                       "
                       class="extras"
                     >
-                      <span v-if="card.text" class="description"></span>
+                      <span v-if="card.text.trim()" class="description"></span>
                       <span
                         v-if="card.members && card.members.length > 0"
                         class="members"
@@ -300,7 +302,7 @@ export default {
 
 .bcard {
   position: relative;
-  padding: 5px 7px 5px 7px;
+  padding: 0.5rem;
   background-color: #fff;
   border-radius: 3px;
   margin-bottom: 5px;
@@ -308,19 +310,24 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
-  .bcard-title {
-    padding-right: 7px;
-    line-height: 1.333;
+  .title-row {
+    display: flex;
     margin-bottom: 0.2rem;
+    justify-content: space-between;
     &:last-child {
-      margin-bottom: 0.1rem;
+      margin-bottom: 0rem;
     }
-  }
-  .points {
-    position: absolute;
-    right: 11px;
-    top: 5px;
-    color: #999;
+    .bcard-title {
+      flex-grow: 1;
+      margin-top: -4px;
+      line-height: 1.333;
+    }
+    .points {
+      margin-top: -4px;
+      padding-left: 0.2rem;
+      line-height: 1.333;
+      color: #999;
+    }
   }
   .todo-progress {
     width: 100%;
