@@ -1,10 +1,9 @@
 <template>
   <component
-    v-bind:is="tag"
+    :is="tag"
     :contenteditable="hasFocus"
-    ref="elm"
     :spellcheck="allowSpellcheck"
-    :class="{ placeholder: !this.hasContent }"
+    :class="{ placeholder: !hasContent }"
     @input="update"
     @click="onClick"
     @blur="onBlur"
@@ -56,7 +55,7 @@ export default {
   mounted() {
     this.updateInnerText()
     if (this.focus) {
-      this.$refs.elm.focus()
+      this.$el.focus()
     }
   },
   computed: {
@@ -88,7 +87,7 @@ export default {
       }
     },
     update: debounce(
-      function (event) {
+      function(event) {
         this.$emit('update', event.target.innerText, event)
       },
       300,
@@ -101,15 +100,15 @@ export default {
       this.hasFocus = true
       this.updateInnerText()
       this.$nextTick(() => {
-        this.$refs.elm.focus()
+        this.$el.focus()
       })
     },
     onBlur(event) {
       this.hasFocus = false
       this.updateInnerText()
       this.$emit('blur')
-    },
-  },
+    }
+  }
 }
 </script>
 
