@@ -1,6 +1,5 @@
 <template>
   <b-container>
-
     <b-row class="title-row">
       <b-col>
         <h1>Boards</h1>
@@ -9,7 +8,7 @@
     <BoardOverview
       :boards="boards.filter(b => b.members.includes(user._id.toString()))"
       :create-new-board="true"
-      @removeBoard="(id) => removeBoard(id)"
+      @removeBoard="id => removeBoard(id)"
       @addBoard="showCreateBoardModal = true"
     />
 
@@ -20,7 +19,7 @@
     </b-row>
     <BoardOverview
       :boards="boards.filter(b => !b.members.includes(user._id.toString()))"
-      @removeBoard="(id) => removeBoard(id)"
+      @removeBoard="id => removeBoard(id)"
     />
 
     <!-- Create new board modal -->
@@ -30,6 +29,9 @@
       hide-footer
     >
       <b-form @submit.prevent="onNewBoardSubmit">
+        <b-alert :show="!!createBoardError" variant="danger">{{
+          createBoardError
+        }}</b-alert>
         <b-form-group label="Name" label-for="name-input">
           <b-form-input
             id="name-input"
@@ -39,10 +41,11 @@
             placeholder="Enter board name..."
           ></b-form-input>
         </b-form-group>
-        <b-button class="float-right" type="submit" variant="primary">Create</b-button>
+        <b-button class="float-right" type="submit" variant="primary"
+          >Create</b-button
+        >
       </b-form>
     </b-modal>
-
   </b-container>
 </template>
 
@@ -62,7 +65,8 @@ export default {
   data() {
     return {
       showCreateBoardModal: false,
-      newBoardName: ''
+      newBoardName: '',
+      createBoardError: null
     }
   },
   head() {
@@ -72,11 +76,22 @@ export default {
   },
   methods: {
     async onNewBoardSubmit() {
-      const { board } = await this.$axios.$post('/api/boards', {
-        name: this.newBoardName
-      })
-      this.$router.push(`/b/${board.slug}`)
-      this.newBoardName = ''
+      try {
+        const { board } = await this.$axios.$post('/api/boards', {
+          name: this.newBoardName
+        })
+        this.$router.push(`/b/${board.slug}`)
+        this.newBoardName = ''
+      } catch (err) {
+        const {
+          response: { data }
+        } = err
+        if (data.error && data.error.message === 'slug taken') {
+          this.createBoardError = 'Please pick another board name'
+        } else {
+          this.createBoardError = 'An unknown error occured'
+        }
+      }
     },
     async removeBoard(id) {
       await this.$axios.$delete(`/api/boards/${id}`)

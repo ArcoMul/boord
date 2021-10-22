@@ -6,9 +6,14 @@ const User = require('../schemas/User')
 const Card = require('../schemas/Card')
 
 async function create({ name, userId }) {
+  const boardSlug = slug(name, { lower: true })
+  const other = await getBoardBySlug(boardSlug)
+  if (other) {
+    throw new Error('slug taken')
+  }
   const board = new Board({
     name: name,
-    slug: slug(name, { lower: true }),
+    slug: boardSlug,
     members: [userId],
     columns: [
       { title: 'Backlog' },
