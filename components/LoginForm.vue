@@ -98,10 +98,19 @@ export default {
 <style scoped lang="scss">
 @import '../assets/style/variables.scss';
 
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 h1 {
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
 }
 
 .or {

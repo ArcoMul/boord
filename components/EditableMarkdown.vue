@@ -1,10 +1,9 @@
 <template>
   <component
-    v-bind:is="tag"
+    :is="tag"
     :contenteditable="hasFocus"
-    ref="elm"
     :spellcheck="allowSpellcheck"
-    :class="{ 'placeholder': !this.hasContent }"
+    :class="{ placeholder: !hasContent }"
     @input="update"
     @click="onClick"
     @blur="onBlur"
@@ -13,6 +12,7 @@
 
 <script>
 import marked from 'marked'
+import { debounce } from 'lodash'
 
 const renderer = new marked.Renderer()
 const linkRenderer = renderer.link
@@ -26,36 +26,36 @@ export default {
     content: String,
     tag: {
       type: String,
-      default: 'span'
+      default: 'span',
     },
     placeholder: {
       type: String,
-      default: ''
+      default: '',
     },
     focus: {
       type: Boolean,
-      default: false
+      default: false,
     },
     closeOnBreak: {
       type: Boolean,
-      default: false
+      default: false,
     },
     spellcheck: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       hasFocus: false,
       contenteditable: false,
-      marked: marked(this.content || '', { renderer })
+      marked: marked(this.content || '', { renderer }),
     }
   },
   mounted() {
     this.updateInnerText()
     if (this.focus) {
-      this.$refs.elm.focus()
+      this.$el.focus()
     }
   },
   computed: {
@@ -72,7 +72,7 @@ export default {
       if (val !== this.$el.innerText) {
         this.$el.innerText = this.content
       }
-    }
+    },
   },
   methods: {
     updateInnerText() {
@@ -86,9 +86,13 @@ export default {
         this.$el.innerText = this.placeholder
       }
     },
-    update(event) {
-      this.$emit('update', event.target.innerText, event)
-    },
+    update: debounce(
+      function(event) {
+        this.$emit('update', event.target.innerText, event)
+      },
+      300,
+      { maxWait: 1000 }
+    ),
     onClick(event) {
       if (this.hasFocus) {
         return
@@ -96,7 +100,7 @@ export default {
       this.hasFocus = true
       this.updateInnerText()
       this.$nextTick(() => {
-        this.$refs.elm.focus()
+        this.$el.focus()
       })
     },
     onBlur(event) {

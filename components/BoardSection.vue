@@ -45,20 +45,31 @@
                   class="bcard card-bcard"
                 >
                   <div @click="$emit('cardClick', card)">
-                    <div class="bcard-title">{{ card.title }}</div>
-                    <span class="points" v-if="card.points">{{
-                      card.points
-                    }}</span>
+                    <div class="title-row">
+                      <div class="bcard-title">{{ card.title }}</div>
+                      <span v-if="card.points" class="points">{{
+                        card.points
+                      }}</span>
+                    </div>
+                    <div
+                      v-if="getTotalTodos(card.text) > 0"
+                      class="todo-progress"
+                    >
+                      <div class="progressbar"><div class="fill" :style="{ width: (getDoneTodos(card.text)/getTotalTodos(card.text)*100)+'%' }"></div></div>
+                      <div class="text">
+                        {{ getDoneTodos(card.text) }}/{{ getTotalTodos(card.text) }}
+                      </div>
+                    </div>
                     <div
                       v-if="
-                        card.text || (card.members && card.members.length > 0)
+                        card.text.trim() || (card.members && card.members.length > 0)
                       "
                       class="extras"
                     >
-                      <span class="description" v-if="card.text"></span>
+                      <span v-if="card.text.trim()" class="description"></span>
                       <span
-                        class="members"
                         v-if="card.members && card.members.length > 0"
+                        class="members"
                       >
                         <img
                           v-for="member in card.members"
@@ -190,6 +201,12 @@ export default {
           sectionId: this.section.id
         })
       }
+    },
+    getTotalTodos(text) {
+      return (text.match(/\- \[[x|\s]\]/gim) || []).length
+    },
+    getDoneTodos(text) {
+      return (text.match(/\- \[[x]\]/gim) || []).length
     }
   }
 }
@@ -285,7 +302,7 @@ export default {
 
 .bcard {
   position: relative;
-  padding: 5px 7px 5px 7px;
+  padding: 0.5rem;
   background-color: #fff;
   border-radius: 3px;
   margin-bottom: 5px;
@@ -293,23 +310,58 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
-  & > div {
-    min-height: 23px;
+  .title-row {
+    display: flex;
+    margin-bottom: 0.2rem;
+    justify-content: space-between;
+    &:last-child {
+      margin-bottom: 0rem;
+    }
+    .bcard-title {
+      flex-grow: 1;
+      margin-top: -4px;
+      line-height: 1.333;
+    }
+    .points {
+      margin-top: -4px;
+      padding-left: 0.2rem;
+      line-height: 1.333;
+      color: #999;
+    }
   }
-  .bcard-title {
-    padding-right: 7px;
-  }
-  .points {
-    position: absolute;
-    right: 11px;
-    top: 5px;
-    color: #999;
+  .todo-progress {
+    width: 100%;
+    padding-top: 0.1rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .progressbar {
+      margin-right: 0.5rem;
+      width: 100%;
+      height: 4px;
+      background-color: #eee;
+      flex-grow: 1;
+      border-radius: 2px;
+      overflow: hidden;
+      .fill {
+        height: 100%;
+        background-color: #0ddd8f;
+      }
+    }
+    .text {
+      font-size: 0.7rem;
+      line-height: 1;
+      margin-top: -1.5px;
+      color: #999;
+    }
   }
   .extras {
-    height: 23px;
+    height: 20px;
     display: flex;
+    line-height: 1;
     .description {
-      margin-top: 6px;
+      margin-top: 3px;
       margin-right: 5px;
       background-color: #999;
       mask-image: url('/description.svg');
@@ -318,9 +370,9 @@ export default {
       display: block;
     }
     .members img {
-      width: 23px;
-      height: 23px;
-      border-radius: 23px;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
       margin-right: 5px;
     }
   }

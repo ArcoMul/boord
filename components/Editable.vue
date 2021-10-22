@@ -1,10 +1,9 @@
 <template>
   <component
-    v-bind:is="tag"
+    :is="tag"
     contenteditable="true"
-    ref="elm"
     :spellcheck="allowSpellcheck"
-    :class="{ 'placeholder': !this.hasContent }"
+    :class="{ placeholder: !hasContent }"
     @input="update"
     @keydown="keydown"
     @focus="onFocus"
@@ -13,6 +12,8 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
+
 export default {
   props: {
     content: String,
@@ -46,7 +47,7 @@ export default {
   mounted() {
     this.updateInnerText()
     if (this.focus) {
-      this.$refs.elm.focus()
+      this.$el.focus()
     }
   },
   computed: {
@@ -69,15 +70,20 @@ export default {
         this.$el.innerText = this.placeholder
       }
     },
-    update(event) {
-      this.$emit('update', event.target.innerText, event)
-    },
+    update: debounce(
+      function(event) {
+        this.$emit('update', event.target.innerText, event)
+      },
+      300,
+      { maxWait: 1000 }
+    ),
     keydown(event) {
       if (event.keyCode === 13) {
+        this.$emit('update', this.$el.innerText)
         this.$emit('submit')
         if (this.closeOnBreak) {
           event.preventDefault()
-          this.$refs.elm.blur()
+          this.$el.blur()
         }
       }
     },

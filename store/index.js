@@ -43,7 +43,11 @@ export const mutations = {
     state.board = Object.assign(state.board, props)
   },
   updateCard(state, { card }) {
-    state.cards = state.cards.map(t => (t._id === card._id ? card : t))
+    const index = state.cards.findIndex(t => t._id === card._id)
+    if (index === -1) {
+      throw new Error(`store updateCard: can't find card with _id ${card._id}`)
+    }
+    Vue.set(state.cards, index, card)
   },
   moveCard(
     state,
