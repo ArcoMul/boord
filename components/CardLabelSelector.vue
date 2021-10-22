@@ -5,6 +5,7 @@
       :key="label._id"
       class="label"
       :style="{ backgroundColor: label.color }"
+      @click="$emit('remove-label', label)"
     >
       {{ label.name }}
     </div>
@@ -18,8 +19,9 @@
         :key="label._id"
         :style="{ backgroundColor: label.color }"
         class="popout-label"
+        @click="$emit('add-label', label)"
       >
-        {{ label.name }}
+        <span>{{ label.name }}</span>
       </div>
     </Popout>
   </div>
@@ -47,8 +49,14 @@ export default {
     }
   },
   computed: {
+    labelsMap() {
+      return this.labels.reduce((map, label) => {
+        map[label._id] = label
+        return map
+      }, {})
+    },
     selectedLabels() {
-      return this.selected.map(s => this.labels[s])
+      return this.selected.map(s => this.labelsMap[s])
     }
   }
 }
@@ -61,14 +69,26 @@ export default {
   line-height: 0.8rem;
   font-size: 0.8rem;
   padding: 0.5rem;
-  margin-right: 0.5rem;
+  margin-right: 0.25rem;
   border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  min-height: calc(0.8rem + 0.5rem + 0.5rem);
+  min-width: calc(0.8rem + 0.5rem + 0.5rem);
+  vertical-align: middle;
+  cursor: pointer;
 }
 .add {
-  background-color: #eee;
+  background-color: #6c757d;
   min-width: 1.8rem;
   text-align: center;
-  cursor: pointer;
+  margin-left: -6px;
+  &:first-child {
+    margin-left: 0;
+  }
+}
+.label:hover {
+  text-decoration: line-through;
 }
 .popout-label {
   padding: 0.5rem;
@@ -77,5 +97,8 @@ export default {
   text-align: left;
   cursor: pointer;
   font-size: 0.9rem;
+  min-height: calc(0.8rem + 0.5rem + 0.5rem);
+  color: white;
+  font-weight: bold;
 }
 </style>

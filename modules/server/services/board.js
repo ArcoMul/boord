@@ -28,6 +28,14 @@ async function create({ name, userId }) {
         backgroundColor: '#f00',
         cards: [[], [], [], []]
       }
+    ],
+    labels: [
+      { color: '#61bd4f', name: '' },
+      { color: '#f2d600', name: '' },
+      { color: '#ff9f1a', name: '' },
+      { color: '#eb5a46', name: '' },
+      { color: '#c377e0', name: '' },
+      { color: '#0079bf', name: '' }
     ]
   })
   await board.save()

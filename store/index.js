@@ -282,5 +282,11 @@ export const getters = {
       acc[val._id] = val
       return acc
     }, {})
+  },
+  labelsMap(state, getters) {
+    return state.board.labels.reduce((acc, val) => {
+      acc[val._id] = val
+      return acc
+    }, {})
   }
 }

@@ -22,6 +22,19 @@ router.get('/boards', async (req, res, next) => {
 router.get('/boards/:slug', async (req, res, next) => {
   try {
     const board = await boardService.getBoardBySlug(req.params.slug)
+    if (!board.labels || board.labels.length === 0) {
+      board.labels = [
+        { color: '#61bd4f', name: '' },
+        { color: '#f2d600', name: '' },
+        { color: '#ff9f1a', name: '' },
+        { color: '#eb5a46', name: '' },
+        { color: '#c377e0', name: '' },
+        { color: '#0079bf', name: '' }
+      ]
+      await boardService.updateBoard({
+        board: { _id: board._id, labels: board.labels }
+      })
+    }
     const cards = await Card.find({
       boardId: new mongoose.Types.ObjectId(board._id)
     })

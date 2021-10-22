@@ -1,12 +1,12 @@
 <template>
   <b-modal
     v-if="showModal"
+    :key="card._id"
     v-model="showModal"
     size="lg"
     hide-header
     hide-footer
     modal-class="board-modal"
-    :key="card._id"
     @hide="onHide"
   >
     <b-row>
@@ -27,6 +27,8 @@
           :labels="board.labels"
           :selected="card.labels"
           class="mb-3"
+          @add-label="addLabel"
+          @remove-label="removeLabel"
         />
         <EditableMarkdown
           tag="p"
@@ -61,12 +63,14 @@
             v-if="!card.members.includes('' + $store.state.user._id)"
             class="add-myself-button"
             @click="() => addMember(card, '' + $store.state.user._id)"
-          >Add myself</b-button>
+            >Add myself</b-button
+          >
           <b-button
             v-else
             class="add-myself-button"
             @click="() => onRemoveMember(card, '' + $store.state.user._id)"
-          >Remove myself</b-button>
+            >Remove myself</b-button
+          >
         </div>
         <hr />
         <confirm-link
@@ -180,6 +184,18 @@ export default {
     onRemoveMember(_card, memberId) {
       const card = Object.assign({}, _card)
       card.members = card.members.filter(id => id !== memberId)
+      this.$store.dispatch('updateCard', { card })
+    },
+    addLabel(label) {
+      const card = Object.assign({}, this.card)
+      const labels = [...card.labels, label._id]
+      card.labels = labels
+      this.$store.dispatch('updateCard', { card })
+    },
+    removeLabel(label) {
+      const card = Object.assign({}, this.card)
+      const labels = card.labels.filter(i => i !== label._id)
+      card.labels = labels
       this.$store.dispatch('updateCard', { card })
     }
   }

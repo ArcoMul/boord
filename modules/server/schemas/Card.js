@@ -19,7 +19,8 @@ const CardSchema = new mongoose.Schema(
     members: {
       type: [String],
       default: []
-    }
+    },
+    labels: [mongoose.Types.ObjectId]
   },
   {
     collection: 'card',
