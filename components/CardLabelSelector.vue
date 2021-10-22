@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-label-selector">
     <div
       v-for="label in selectedLabels"
       :key="label._id"
@@ -18,8 +18,15 @@
         v-for="label in labels"
         :key="label._id"
         :style="{ backgroundColor: label.color }"
-        class="popout-label"
-        @click="$emit('add-label', label)"
+        :class="{
+          'popout-label': true,
+          'is-selected': selected.includes(label._id)
+        }"
+        @click="
+          selected.includes(label._id)
+            ? $emit('remove-label', label)
+            : $emit('add-label', label)
+        "
       >
         <span>{{ label.name }}</span>
       </div>
@@ -63,13 +70,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card-label-selector {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
 .label,
 .add {
   display: inline-block;
   line-height: 0.8rem;
   font-size: 0.8rem;
   padding: 0.5rem;
-  margin-right: 0.25rem;
   border-radius: 3px;
   color: white;
   font-weight: bold;
@@ -82,10 +93,6 @@ export default {
   background-color: #6c757d;
   min-width: 1.8rem;
   text-align: center;
-  margin-left: -6px;
-  &:first-child {
-    margin-left: 0;
-  }
 }
 .label:hover {
   text-decoration: line-through;
@@ -100,5 +107,8 @@ export default {
   min-height: calc(0.8rem + 0.5rem + 0.5rem);
   color: white;
   font-weight: bold;
+  &.is-selected {
+    opacity: 0.5;
+  }
 }
 </style>

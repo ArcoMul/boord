@@ -100,6 +100,7 @@ export default {
     },
     onBlur(event) {
       this.hasFocus = false
+      this.$emit('update', this.$el.innerText)
       this.updateInnerText()
       this.$emit('blur')
     }

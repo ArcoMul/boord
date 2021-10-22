@@ -1,6 +1,6 @@
 <template>
-  <div v-click-outside="close" class="popout-container">
-    <component :is="tag" @click="show = true">{{ text }}</component>
+  <div v-click-outside="close" class="popout-container" @click="show = true">
+    <component :is="tag">{{ text }}</component>
     <div :class="{ popout: true, show }">
       <slot />
     </div>
@@ -47,6 +47,7 @@ export default {
   border-radius: 3px;
   border: 1px solid #ddd;
   padding: 1rem;
+  z-index: 100;
   &.show {
     display: block;
   }

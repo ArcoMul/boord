@@ -18,7 +18,8 @@ export const state = () => ({
   board: {},
   members: [],
   cards: [],
-  collapsedSections: []
+  collapsedSections: [],
+  showLabelText: true
 })
 
 export const mutations = {
@@ -89,6 +90,9 @@ export const mutations = {
         s => s !== sectionId
       )
     }
+  },
+  toggleLabelText(state) {
+    state.showLabelText = !state.showLabelText
   },
   SET_USER(_state, user) {
     _state.user = user

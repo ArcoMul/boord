@@ -34,7 +34,7 @@
             'force-visible': toggled,
             toggled: toggled
           }"
-          @click="collapseSection()"
+          @click="collapseSection"
           >&nbsp;</span
         >
       </b-col>
@@ -67,7 +67,12 @@
                         :style="{
                           backgroundColor: $store.getters.labelsMap[label].color
                         }"
-                        >{{ $store.getters.labelsMap[label].name }}</span
+                        @click.prevent.stop="$store.commit('toggleLabelText')"
+                        >{{
+                          $store.state.showLabelText
+                            ? $store.getters.labelsMap[label].name
+                            : ''
+                        }}</span
                       >
                     </div>
                     <div class="title-row">
@@ -351,6 +356,8 @@ export default {
   .labels-row {
     margin-bottom: 0.3rem;
     display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
     span {
       display: inline-block;
       font-size: 0.7rem;
@@ -358,8 +365,8 @@ export default {
       padding: 0.05rem 0.3rem 0.1rem 0.3rem;
       color: white;
       border-radius: 2px;
-      margin-right: 2px;
-      min-width: calc(1rem);
+      min-width: calc(2rem);
+      min-height: 5px;
     }
   }
   .title-row {
