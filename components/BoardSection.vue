@@ -325,6 +325,10 @@ export default {
   }
 }
 
+.col-container {
+  max-width: 1200px;
+}
+
 @media (max-width: 768px) {
   .col-container {
     overflow-x: scroll;
