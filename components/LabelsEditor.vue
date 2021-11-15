@@ -2,15 +2,18 @@
   <div class="labels">
     <b-row v-for="(label, index) in labels" :key="label._id">
       <b-col>
-          <Editable
-            tag="div"
-            :class="{ color: true, 'mb-1': true, empty: !label.name }"
-            :style="{ backgroundColor: label.color }"
-            placeholder="Enter label name..."
-            :content="label.name"
-            :close-on-break="true"
-            @update="onUpdate(index, $event)"
-          />
+        <Editable
+          tag="div"
+          :class="{
+            color: true,
+            'mb-1': true,
+          }"
+          :style="{ backgroundColor: label.color }"
+          placeholder="Enter label name..."
+          :content="label.name"
+          :close-on-break="true"
+          @update="onUpdate(index, $event)"
+        />
       </b-col>
     </b-row>
   </div>
@@ -50,7 +53,7 @@ export default {
   padding: 0 0.75rem;
   color: white;
   font-weight: bold;
-  &.empty {
+  &.placeholder {
     color: rgba(255, 255, 255, 0.75);
     font-weight: normal;
   }
