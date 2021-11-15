@@ -1,6 +1,6 @@
 <template>
-  <section class="container" id="page-login">
-    <b-row class="justify-content-sm-center">
+  <section id="page-login" class="container">
+    <b-row class="justify-content-center">
       <b-col lg="5" xl="4">
         <LoginForm title="BOORD" subtitle="Get On Board" :allowSignup="true"/>
       </b-col>

@@ -30,6 +30,14 @@
       >
         <span>{{ label.name }}</span>
       </div>
+      <div class="text-right pt-1">
+        <b-link
+          :to="`/b/${this.$store.state.board.slug}/info`"
+          class="font-weight-normal"
+        >
+          Edit labels
+        </b-link>
+      </div>
     </Popout>
   </div>
 </template>
@@ -96,6 +104,9 @@ export default {
 }
 .label:hover {
   text-decoration: line-through;
+}
+.popout {
+  text-align: left;
 }
 .popout-label {
   padding: 0.5rem;
