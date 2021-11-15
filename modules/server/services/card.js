@@ -11,6 +11,13 @@ async function create({ boardId, title, text, points }) {
   return card
 }
 
+function getLastUpdatedCards() {
+  return Card.find()
+    .sort({ updated: -1 })
+    .limit(50)
+}
+
 module.exports = {
-  create
+  create,
+  getLastUpdatedCards
 }

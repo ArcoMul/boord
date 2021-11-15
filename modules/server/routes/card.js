@@ -5,6 +5,15 @@ const Card = require('../schemas/Card')
 
 const router = Router()
 
+router.get('/cards/last-updated', async (req, res, next) => {
+  try {
+    const cards = await cardService.getLastUpdatedCards()
+    res.send(cards)
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.get('/cards/:id', async (req, res, next) => {
   try {
     const card = await Card.findOneById(req.params.id)
