@@ -3,8 +3,11 @@
     :is="tag"
     :contenteditable="hasFocus"
     :spellcheck="allowSpellcheck"
-    :class="{ placeholder: !hasContent }"
-    @input="update"
+    :class="{ placeholder: !hasInnerText && placeholder }"
+    @input="
+      updateHasInnerText($event)
+      update($event)
+    "
     @click="onClick"
     @blur="onBlur"
   />
@@ -26,36 +29,31 @@ export default {
     content: String,
     tag: {
       type: String,
-      default: 'span',
+      default: 'span'
     },
     placeholder: {
       type: String,
-      default: '',
+      default: ''
     },
     focus: {
       type: Boolean,
-      default: false,
+      default: false
     },
     closeOnBreak: {
       type: Boolean,
-      default: false,
+      default: false
     },
     spellcheck: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       hasFocus: false,
+      hasInnerText: !this.isEmptyString(this.content),
       contenteditable: false,
-      marked: marked(this.content || '', { renderer }),
-    }
-  },
-  mounted() {
-    this.updateInnerText()
-    if (this.focus) {
-      this.$el.focus()
+      marked: marked(this.content || '', { renderer })
     }
   },
   computed: {
@@ -63,7 +61,7 @@ export default {
       return this.spellcheck && this.hasFocus
     },
     hasContent() {
-      return this.content && this.content !== '' && this.content !== '\n'
+      return !this.isEmptyString(this.content)
     }
   },
   watch: {
@@ -71,8 +69,15 @@ export default {
       this.marked = marked(val || '', { renderer })
       if (val !== this.$el.innerText) {
         this.$el.innerText = this.content
+        this.hasInnerText = !this.isEmptyString(this.content)
       }
-    },
+    }
+  },
+  mounted() {
+    this.updateInnerText()
+    if (this.focus) {
+      this.$el.focus()
+    }
   },
   methods: {
     updateInnerText() {
@@ -86,6 +91,9 @@ export default {
         this.$el.innerText = this.placeholder
       }
     },
+    updateHasInnerText(event) {
+      this.hasInnerText = !this.isEmptyString(event.target.innerText)
+    },
     update: debounce(
       function(event) {
         this.$emit('update', event.target.innerText, event)
@@ -93,6 +101,15 @@ export default {
       300,
       { maxWait: 1000 }
     ),
+    isEmptyString(value) {
+      return (
+        !value ||
+        value === '' ||
+        value === '\n' ||
+        value === ' ' ||
+        value === this.placeholder
+      )
+    },
     onClick(event) {
       if (this.hasFocus) {
         return

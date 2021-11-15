@@ -3,8 +3,11 @@
     :is="tag"
     contenteditable="true"
     :spellcheck="allowSpellcheck"
-    :class="{ placeholder: !hasContent }"
-    @input="update"
+    :class="{ placeholder: !hasInnerText && placeholder }"
+    @input="
+      updateHasInnerText($event)
+      update($event)
+    "
     @keydown="keydown"
     @focus="onFocus"
     @blur="onBlur"
@@ -41,13 +44,8 @@ export default {
   },
   data() {
     return {
-      hasFocus: false
-    }
-  },
-  mounted() {
-    this.updateInnerText()
-    if (this.focus) {
-      this.$el.focus()
+      hasFocus: false,
+      hasInnerText: !this.isEmptyString(this.content)
     }
   },
   computed: {
@@ -55,7 +53,21 @@ export default {
       return this.spellcheck && this.hasFocus
     },
     hasContent() {
-      return this.content && this.content !== '' && this.content !== '\n'
+      return !this.isEmptyString(this.content)
+    }
+  },
+  watch: {
+    content(val) {
+      if (val !== this.$el.innerText) {
+        this.$el.innerText = this.content
+        this.hasInnerText = !this.isEmptyString(this.content)
+      }
+    }
+  },
+  mounted() {
+    this.updateInnerText()
+    if (this.focus) {
+      this.$el.focus()
     }
   },
   methods: {
@@ -70,6 +82,9 @@ export default {
         this.$el.innerText = this.placeholder
       }
     },
+    updateHasInnerText(event) {
+      this.hasInnerText = !this.isEmptyString(event.target.innerText)
+    },
     update: debounce(
       function(event) {
         this.$emit('update', event.target.innerText, event)
@@ -77,7 +92,17 @@ export default {
       300,
       { maxWait: 1000 }
     ),
+    isEmptyString(value) {
+      return (
+        !value ||
+        value === '' ||
+        value === '\n' ||
+        value === ' ' ||
+        value === this.placeholder
+      )
+    },
     keydown(event) {
+      this.hasTyped = true
       if (event.keyCode === 13) {
         this.$emit('update', this.$el.innerText)
         this.$emit('submit')
@@ -103,13 +128,6 @@ export default {
       this.$emit('update', this.$el.innerText)
       this.updateInnerText()
       this.$emit('blur')
-    }
-  },
-  watch: {
-    content(val) {
-      if (val !== this.$el.innerText) {
-        this.$el.innerText = this.content
-      }
     }
   }
 }
