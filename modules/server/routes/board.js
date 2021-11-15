@@ -21,10 +21,10 @@ router.get('/boards', async (req, res, next) => {
 
 router.get('/boards/:slug', async (req, res, next) => {
   try {
-    const board = await boardService.getBoardBySlug(req.params.slug)
+    let board = await boardService.getBoardBySlug(req.params.slug)
     if (!board.labels || board.labels.length === 0) {
       board.labels = boardService.defaultLabels
-      await boardService.updateBoard({
+      board = await boardService.updateBoard({
         board: { _id: board._id, labels: board.labels }
       })
     }
