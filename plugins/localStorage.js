@@ -4,7 +4,7 @@ export default ({ store }) => {
   window.onNuxtReady(() => {
     createPersistedState({
       key: 'vuex',
-      paths: ['collapsedSections']
+      paths: ['collapsedSections', 'showLabelText']
     })(store)
   })
 }

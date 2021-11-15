@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'board-section': true, 'toggled': toggled }">
+  <div :class="{ 'board-section': true, toggled: toggled }">
     <b-row>
       <b-col>
         <div class="section-drag-handle"></div>
@@ -11,17 +11,32 @@
           @update="updateSectionName"
         />
         <span class="section-title title-border points">
-          <span class="done">{{donePoints}}</span> /
-          <span class="total">{{totalPoints}}</span>
+          <span class="done">{{ donePoints }}</span> /
+          <span class="total">{{ totalPoints }}</span>
         </span>
         <span
-          :class="{ 'section-title': true, 'title-border': true, 'info': true, 'force-visible': section.text && section.text !== '' && section.text !== '\n' }"
+          :class="{
+            'section-title': true,
+            'title-border': true,
+            info: true,
+            'force-visible':
+              section.text && section.text !== '' && section.text !== '\n'
+          }"
           @click="$emit('sectionInfo', section)"
-        >i</span>
+          >i</span
+        >
         <span
-          :class="{ 'section-title': true, 'title-border': true, 'info': true, 'toggle': true, 'force-visible': toggled, 'toggled': toggled }"
-          @click="collapseSection()"
-        >&nbsp;</span>
+          :class="{
+            'section-title': true,
+            'title-border': true,
+            info: true,
+            toggle: true,
+            'force-visible': toggled,
+            toggled: toggled
+          }"
+          @click="collapseSection"
+          >&nbsp;</span
+        >
       </b-col>
     </b-row>
     <b-row>
@@ -45,6 +60,21 @@
                   class="bcard card-bcard"
                 >
                   <div @click="$emit('cardClick', card)">
+                    <div class="labels-row">
+                      <span
+                        v-for="label in card.labels"
+                        :key="label"
+                        :style="{
+                          backgroundColor: $store.getters.labelsMap[label].color
+                        }"
+                        @click.prevent.stop="$store.commit('toggleLabelText')"
+                        >{{
+                          $store.state.showLabelText
+                            ? $store.getters.labelsMap[label].name
+                            : ''
+                        }}</span
+                      >
+                    </div>
                     <div class="title-row">
                       <div class="bcard-title">{{ card.title }}</div>
                       <span v-if="card.points" class="points">{{
@@ -55,14 +85,28 @@
                       v-if="getTotalTodos(card.text) > 0"
                       class="todo-progress"
                     >
-                      <div class="progressbar"><div class="fill" :style="{ width: (getDoneTodos(card.text)/getTotalTodos(card.text)*100)+'%' }"></div></div>
+                      <div class="progressbar">
+                        <div
+                          class="fill"
+                          :style="{
+                            width:
+                              (getDoneTodos(card.text) /
+                                getTotalTodos(card.text)) *
+                                100 +
+                              '%'
+                          }"
+                        ></div>
+                      </div>
                       <div class="text">
-                        {{ getDoneTodos(card.text) }}/{{ getTotalTodos(card.text) }}
+                        {{ getDoneTodos(card.text) }}/{{
+                          getTotalTodos(card.text)
+                        }}
                       </div>
                     </div>
                     <div
                       v-if="
-                        card.text.trim() || (card.members && card.members.length > 0)
+                        card.text.trim() ||
+                          (card.members && card.members.length > 0)
                       "
                       class="extras"
                     >
@@ -281,8 +325,11 @@ export default {
   }
 }
 
-@media (max-width: 768px)
-{
+.col-container {
+  max-width: 1200px;
+}
+
+@media (max-width: 768px) {
   .col-container {
     overflow-x: scroll;
     padding: 0;
@@ -309,6 +356,22 @@ export default {
   cursor: pointer;
   &:last-child {
     margin-bottom: 0;
+  }
+  .labels-row {
+    margin-bottom: 0.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    span {
+      display: inline-block;
+      font-size: 0.7rem;
+      line-height: 1;
+      padding: 0.05rem 0.3rem 0.1rem 0.3rem;
+      color: white;
+      border-radius: 2px;
+      min-width: calc(2rem);
+      min-height: 5px;
+    }
   }
   .title-row {
     display: flex;

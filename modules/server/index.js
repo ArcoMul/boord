@@ -100,6 +100,11 @@ module.exports = function ExpressModule() {
     // Routes
     app.use('', require(routesPath))
 
+    app.use(function(err, req, res, next) {
+      console.error(err.stack)
+      res.status(500).send({ error: { message: err.message } })
+    })
+
     this.addServerMiddleware(app)
   })
 }

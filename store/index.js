@@ -18,7 +18,8 @@ export const state = () => ({
   board: {},
   members: [],
   cards: [],
-  collapsedSections: []
+  collapsedSections: [],
+  showLabelText: true
 })
 
 export const mutations = {
@@ -89,6 +90,9 @@ export const mutations = {
         s => s !== sectionId
       )
     }
+  },
+  toggleLabelText(state) {
+    state.showLabelText = !state.showLabelText
   },
   SET_USER(_state, user) {
     _state.user = user
@@ -279,6 +283,12 @@ export const getters = {
   },
   membersMap(state, getters) {
     return state.members.reduce((acc, val) => {
+      acc[val._id] = val
+      return acc
+    }, {})
+  },
+  labelsMap(state, getters) {
+    return state.board.labels.reduce((acc, val) => {
       acc[val._id] = val
       return acc
     }, {})

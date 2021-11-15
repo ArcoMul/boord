@@ -5,6 +5,15 @@ const Board = require('../schemas/Board')
 const User = require('../schemas/User')
 const Card = require('../schemas/Card')
 
+const defaultLabels = [
+  { color: '#61bd4f', name: '' },
+  { color: '#f2d600', name: '' },
+  { color: '#ff9f1a', name: '' },
+  { color: '#eb5a46', name: '' },
+  { color: '#c377e0', name: '' },
+  { color: '#0079bf', name: '' }
+]
+
 async function create({ name, userId }) {
   const boardSlug = slug(name, { lower: true })
   const other = await getBoardBySlug(boardSlug)
@@ -28,7 +37,8 @@ async function create({ name, userId }) {
         backgroundColor: '#f00',
         cards: [[], [], [], []]
       }
-    ]
+    ],
+    labels: defaultLabels
   })
   await board.save()
   return board
@@ -223,6 +233,7 @@ async function getMembers(board) {
 }
 
 module.exports = {
+  defaultLabels,
   create,
   remove,
   getBoardBySlug,

@@ -32,7 +32,13 @@ const BoardSchema = new mongoose.Schema(
         deleted: Date
       }
     ],
-    members: [String]
+    members: [String],
+    labels: [
+      {
+        color: String,
+        name: String
+      }
+    ]
   },
   {
     collection: 'board',
