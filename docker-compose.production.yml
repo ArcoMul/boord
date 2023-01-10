@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  reverse-proxy:
+    image: traefik:v2.4
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=devops@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  boord:
+    image: lumocra/boord
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - VIRTUAL_HOST=boord.example.com
+      - BROWSER_BASE_URL=https://boord.example.com
+      - BASE_URL=http://localhost:3000
+      - SLACK_CLIENT_ID=XXX
+      - SLACK_CLIENT_SECRET=XXX
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.boord.rule=Host(`boord.example.com`)"
+      - "traefik.http.routers.boord.entrypoints=websecure"
+      - "traefik.http.routers.boord.tls.certresolver=myresolver"
+      - "traefik.http.services.boord.loadbalancer.server.port=3000"
+
+  mongodb:
+    image: mongo:4.2.12
+    restart: unless-stopped
+    command: mongod --quiet --logpath /dev/null 
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  mongodb-data:
